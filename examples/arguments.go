@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/lus/dgc"
+	"github.com/LightningDev1/dgc"
 )
 
 // This example shows how to use the integrated argument parser

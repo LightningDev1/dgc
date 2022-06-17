@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/LightningDev1/dgc"
 	"github.com/LightningDev1/discordgo"
-	"github.com/lus/dgc"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/lus/dgc
+module github.com/LightningDev1/dgc
 
 go 1.18
 
