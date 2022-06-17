@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/bwmarrin/discordgo"
+	"github.com/LightningDev1/discordgo"
 	"github.com/lus/dgc"
 )
 

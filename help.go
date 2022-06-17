@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bwmarrin/discordgo"
+	"github.com/LightningDev1/discordgo"
 )
 
 // RegisterDefaultHelpCommand registers the default help command

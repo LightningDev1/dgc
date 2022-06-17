@@ -1,6 +1,6 @@
 package dgc
 
-import "github.com/bwmarrin/discordgo"
+import "github.com/LightningDev1/discordgo"
 
 // Ctx represents the context for a command event
 type Ctx struct {
