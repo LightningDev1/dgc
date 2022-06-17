@@ -15,6 +15,7 @@ type Router struct {
 	Prefixes         []string
 	IgnorePrefixCase bool
 	BotsAllowed      bool
+	SelfBot          bool
 	Commands         []*Command
 	Middlewares      []Middleware
 	PingHandler      ExecutionHandler
@@ -73,6 +74,11 @@ func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreat
 
 		// Check if the message was sent by a bot
 		if message.Author.Bot && !router.BotsAllowed {
+			return
+		}
+
+		// Check if the bot is a self bot
+		if message.Author.ID != session.State.User.ID && router.SelfBot {
 			return
 		}
 
