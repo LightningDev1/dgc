@@ -13,23 +13,75 @@ var regexSplitting = regexp.MustCompile("\\s+")
 // Router represents a DiscordGo command router
 type Router struct {
 	Prefixes         []string
+	PrefixFunc       func() []string
 	IgnorePrefixCase bool
 	BotsAllowed      bool
 	SelfBot          bool
+	IsUserAllowedFunc func(*Ctx) bool
 	Commands         []*Command
 	Middlewares      []Middleware
+	Categories       []*Category
 	PingHandler      ExecutionHandler
 	Storage          map[string]*ObjectsMap
+	currentCategory  string
 }
 
 // Create makes sure all maps get initialized
 func Create(router *Router) *Router {
 	router.Storage = make(map[string]*ObjectsMap)
+	router.InitializeStorage("categories")
 	return router
+}
+
+// StartCategory starts a new category
+// All commands registered after a call to StartCategory will be in the given category
+func (router *Router) StartCategory(name string, description string) {
+	router.Storage["categories"].Set(name, []*Command{})
+	router.Categories = append(router.Categories, &Category{
+		Name:        name,
+		Description: description,
+	})
+	router.currentCategory = name
+}
+
+// StopCategory stops the current category
+func (router *Router) StopCategory() {
+	router.currentCategory = ""
+}
+
+// GetCategory returns the category with the given name if it exists
+func (router *Router) GetCategory(name string) *Category {
+	var category *Category
+	for _, category_ := range router.Categories {
+		if strings.EqualFold(category_.Name, name) {
+			category = category_
+		}
+	}
+	if category != nil {
+		if categories, ok := router.Storage["categories"]; ok {
+			commands, success := categories.Get(name)
+			if success {
+				category.Commands = commands.([]*Command)
+				return category
+			}
+		}
+	}
+	return nil
 }
 
 // RegisterCmd registers a new command
 func (router *Router) RegisterCmd(command *Command) {
+	if router.currentCategory != "" {
+		category := router.Storage["categories"]
+		if category != nil {
+			categoryCommands, success := category.Get(router.currentCategory)
+			if success {
+				categoryCommands = append(categoryCommands.([]*Command), command)
+				category.Set(router.currentCategory, categoryCommands)
+				command.Category = router.GetCategory(router.currentCategory)
+			}
+		}
+	}
 	router.Commands = append(router.Commands, command)
 }
 
@@ -65,6 +117,14 @@ func (router *Router) Initialize(session *discordgo.Session) {
 	session.AddHandler(router.Handler())
 }
 
+func (router *Router) GetPrefixes() []string {
+	prefixes := router.Prefixes
+	if router.PrefixFunc != nil {
+		prefixes = router.PrefixFunc()
+	}
+	return prefixes
+}
+
 // Handler provides the discordgo handler for the given router
 func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreate) {
 	return func(session *discordgo.Session, event *discordgo.MessageCreate) {
@@ -74,11 +134,6 @@ func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreat
 
 		// Check if the message was sent by a bot
 		if message.Author.Bot && !router.BotsAllowed {
-			return
-		}
-
-		// Check if the bot is a self bot
-		if message.Author.ID != session.State.User.ID && router.SelfBot {
 			return
 		}
 
@@ -94,7 +149,8 @@ func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreat
 		}
 
 		// Check if the message starts with one of the defined prefixes
-		hasPrefix, content := stringHasPrefix(content, router.Prefixes, router.IgnorePrefixCase)
+		prefixes := router.GetPrefixes()
+		hasPrefix, content := stringHasPrefix(content, prefixes, router.IgnorePrefixCase)
 		if !hasPrefix {
 			return
 		}
@@ -126,6 +182,13 @@ func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreat
 				CustomObjects: newObjectsMap(),
 				Router:        router,
 				Command:       command,
+			}
+
+			// Check if the user is allowed to use the bot
+			if router.IsUserAllowedFunc != nil {
+				if !router.IsUserAllowedFunc(ctx) {
+					return
+				}
 			}
 
 			// Trigger the command

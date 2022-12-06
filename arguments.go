@@ -466,6 +466,11 @@ type Argument struct {
 	raw string
 }
 
+func (argument *Argument) SetRaw(raw string) *Argument {
+	argument.raw = raw
+	return argument
+}
+
 // Raw returns the raw string value of the argument
 func (argument *Argument) Raw() string {
 	return argument.raw

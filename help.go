@@ -9,25 +9,31 @@ import (
 	"github.com/LightningDev1/discordgo"
 )
 
+type HelpMessage struct {
+	Page     int
+	Category *Category
+	Command  *Command
+}
+
 // RegisterDefaultHelpCommand registers the default help command
-func (router *Router) RegisterDefaultHelpCommand(session *discordgo.Session, rateLimiter RateLimiter) {
-	// Initialize the helo messages storage
-	router.InitializeStorage("dgc_helpMessages")
+func (router *Router) RegisterDefaultHelpCommand(session *discordgo.Session) {
+	// Initialize the help messages storage
+	router.InitializeStorage("helpMessages")
 
 	// Initialize the reaction add listener
-	session.AddHandler(func(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
+	session.AddHandler(func(session *discordgo.Session, event *discordgo.MessageReactionRemove) {
 		// Define useful variables
 		channelID := event.ChannelID
 		messageID := event.MessageID
 		userID := event.UserID
 
 		// Check whether or not the reaction was added by the bot itself
-		if event.UserID == session.State.User.ID {
+		if event.UserID != session.State.User.ID && router.SelfBot {
 			return
 		}
 
 		// Check whether or not the message is a help message
-		rawPage, ok := router.Storage["dgc_helpMessages"].Get(channelID + ":" + messageID + ":" + event.UserID)
+		rawPage, ok := router.Storage["dgc_helpMessages"].Get(channelID + ":" + messageID + ":" + userID)
 		if !ok {
 			return
 		}
@@ -68,13 +74,9 @@ func (router *Router) RegisterDefaultHelpCommand(session *discordgo.Session, rat
 	})
 
 	// Register the default help command
+	router.StopCategory()
 	router.RegisterCmd(&Command{
 		Name:        "help",
-		Description: "Lists all the available commands or displays some information about a specific command",
-		Usage:       "help [command name]",
-		Example:     "help yourCommand",
-		IgnoreCase:  true,
-		RateLimiter: rateLimiter,
 		Handler:     generalHelpCommand,
 	})
 }

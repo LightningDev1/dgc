@@ -16,6 +16,7 @@ type Command struct {
 	SubCommands []*Command
 	RateLimiter RateLimiter
 	Handler     ExecutionHandler
+	Category    *Category
 }
 
 // GetSubCmd returns the sub command with the given name if it exists
