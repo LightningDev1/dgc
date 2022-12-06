@@ -59,7 +59,7 @@ func main() {
 	})
 
 	// Register the default help command
-	router.RegisterDefaultHelpCommand(session, nil)
+	router.RegisterDefaultHelpCommand(session)
 
 	// Register a simple middleware that injects a custom object
 	router.RegisterMiddleware(func(next dgc.ExecutionHandler) dgc.ExecutionHandler {
