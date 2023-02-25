@@ -166,6 +166,10 @@ func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreat
 		// Split the messages at any whitespace
 		parts := regexSplitting.Split(content, -1)
 
+		if parts[0] == "" {
+			return
+		}
+
 		// Check if the message starts with a command name
 		for _, command := range router.Commands {
 			// Check if the first part is the current command
