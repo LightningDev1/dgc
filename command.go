@@ -6,17 +6,17 @@ import (
 
 // Command represents a simple command
 type Command struct {
-	Name        string
-	Aliases     []string
-	Description string
-	Usage       string
-	Example     string
-	Flags       []string
-	IgnoreCase  bool
-	SubCommands []*Command
-	RateLimiter RateLimiter
-	Handler     ExecutionHandler
-	Category    *Category
+	Name        string           `json:"name"`
+	Aliases     []string         `json:"-"`
+	Description string           `json:"description"`
+	Usage       string           `json:"usage"`
+	Example     string           `json:"example"`
+	Flags       []string         `json:"-"`
+	IgnoreCase  bool             `json:"-"`
+	SubCommands []*Command       `json:"-"`
+	RateLimiter RateLimiter      `json:"-"`
+	Handler     ExecutionHandler `json:"-"`
+	Category    *Category        `json:"-"`
 }
 
 // GetSubCmd returns the sub command with the given name if it exists
