@@ -10,7 +10,7 @@ type Command struct {
 	Aliases     []string         `json:"-"`
 	Description string           `json:"description"`
 	Usage       string           `json:"usage"`
-	Example     string           `json:"example"`
+	Example     string           `json:"-"`
 	Flags       []string         `json:"-"`
 	IgnoreCase  bool             `json:"-"`
 	SubCommands []*Command       `json:"-"`
