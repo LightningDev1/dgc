@@ -3,7 +3,6 @@
 package dgc
 
 import (
-	"github.com/LightningDev1/dgc"
 	"reflect"
 )
 
