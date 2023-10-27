@@ -12,31 +12,31 @@ var Symbols = map[string]map[string]reflect.Value{}
 func init() {
 	Symbols["github.com/LightningDev1/dgc/dgc"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"CodeblockLanguages":  reflect.ValueOf(&dgc.CodeblockLanguages).Elem(),
-		"Create":              reflect.ValueOf(dgc.Create),
-		"NewRateLimiter":      reflect.ValueOf(dgc.NewRateLimiter),
-		"ParseArguments":      reflect.ValueOf(dgc.ParseArguments),
-		"RegexArguments":      reflect.ValueOf(&dgc.RegexArguments).Elem(),
-		"RegexBigCodeblock":   reflect.ValueOf(&dgc.RegexBigCodeblock).Elem(),
-		"RegexChannelMention": reflect.ValueOf(&dgc.RegexChannelMention).Elem(),
-		"RegexRoleMention":    reflect.ValueOf(&dgc.RegexRoleMention).Elem(),
-		"RegexSmallCodeblock": reflect.ValueOf(&dgc.RegexSmallCodeblock).Elem(),
-		"RegexUserMention":    reflect.ValueOf(&dgc.RegexUserMention).Elem(),
+		"CodeblockLanguages":  reflect.ValueOf(&CodeblockLanguages).Elem(),
+		"Create":              reflect.ValueOf(Create),
+		"NewRateLimiter":      reflect.ValueOf(NewRateLimiter),
+		"ParseArguments":      reflect.ValueOf(ParseArguments),
+		"RegexArguments":      reflect.ValueOf(&RegexArguments).Elem(),
+		"RegexBigCodeblock":   reflect.ValueOf(&RegexBigCodeblock).Elem(),
+		"RegexChannelMention": reflect.ValueOf(&RegexChannelMention).Elem(),
+		"RegexRoleMention":    reflect.ValueOf(&RegexRoleMention).Elem(),
+		"RegexSmallCodeblock": reflect.ValueOf(&RegexSmallCodeblock).Elem(),
+		"RegexUserMention":    reflect.ValueOf(&RegexUserMention).Elem(),
 
 		// type definitions
-		"Argument":           reflect.ValueOf((*dgc.Argument)(nil)),
-		"Arguments":          reflect.ValueOf((*dgc.Arguments)(nil)),
-		"Category":           reflect.ValueOf((*dgc.Category)(nil)),
-		"Codeblock":          reflect.ValueOf((*dgc.Codeblock)(nil)),
-		"Command":            reflect.ValueOf((*dgc.Command)(nil)),
-		"Ctx":                reflect.ValueOf((*dgc.Ctx)(nil)),
-		"DefaultRateLimiter": reflect.ValueOf((*dgc.DefaultRateLimiter)(nil)),
-		"ExecutionHandler":   reflect.ValueOf((*dgc.ExecutionHandler)(nil)),
-		"HelpMessage":        reflect.ValueOf((*dgc.HelpMessage)(nil)),
-		"Middleware":         reflect.ValueOf((*dgc.Middleware)(nil)),
-		"ObjectsMap":         reflect.ValueOf((*dgc.ObjectsMap)(nil)),
-		"RateLimiter":        reflect.ValueOf((*dgc.RateLimiter)(nil)),
-		"Router":             reflect.ValueOf((*dgc.Router)(nil)),
+		"Argument":           reflect.ValueOf((*Argument)(nil)),
+		"Arguments":          reflect.ValueOf((*Arguments)(nil)),
+		"Category":           reflect.ValueOf((*Category)(nil)),
+		"Codeblock":          reflect.ValueOf((*Codeblock)(nil)),
+		"Command":            reflect.ValueOf((*Command)(nil)),
+		"Ctx":                reflect.ValueOf((*Ctx)(nil)),
+		"DefaultRateLimiter": reflect.ValueOf((*DefaultRateLimiter)(nil)),
+		"ExecutionHandler":   reflect.ValueOf((*ExecutionHandler)(nil)),
+		"HelpMessage":        reflect.ValueOf((*HelpMessage)(nil)),
+		"Middleware":         reflect.ValueOf((*Middleware)(nil)),
+		"ObjectsMap":         reflect.ValueOf((*ObjectsMap)(nil)),
+		"RateLimiter":        reflect.ValueOf((*RateLimiter)(nil)),
+		"Router":             reflect.ValueOf((*Router)(nil)),
 
 		// interface wrapper definitions
 		"_RateLimiter": reflect.ValueOf((*_github_com_LightningDev1_dgc_RateLimiter)(nil)),
@@ -46,9 +46,9 @@ func init() {
 // _github_com_LightningDev1_dgc_RateLimiter is an interface wrapper for RateLimiter type
 type _github_com_LightningDev1_dgc_RateLimiter struct {
 	IValue           interface{}
-	WNotifyExecution func(a0 *dgc.Ctx) bool
+	WNotifyExecution func(a0 *Ctx) bool
 }
 
-func (W _github_com_LightningDev1_dgc_RateLimiter) NotifyExecution(a0 *dgc.Ctx) bool {
+func (W _github_com_LightningDev1_dgc_RateLimiter) NotifyExecution(a0 *Ctx) bool {
 	return W.WNotifyExecution(a0)
 }
