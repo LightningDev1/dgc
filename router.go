@@ -36,11 +36,14 @@ func Create(router *Router) *Router {
 // StartCategory starts a new category
 // All commands registered after a call to StartCategory will be in the given category
 func (router *Router) StartCategory(name string, description string) {
-	router.Storage["categories"].Set(name, []*Command{})
-	router.Categories = append(router.Categories, &Category{
-		Name:        name,
-		Description: description,
-	})
+	if router.GetCategory(name) == nil {
+		router.Storage["categories"].Set(name, []*Command{})
+		router.Categories = append(router.Categories, &Category{
+			Name:        name,
+			Description: description,
+		})
+	}
+
 	router.currentCategory = name
 }
 
