@@ -136,7 +136,7 @@ func (router *Router) Handler() func(*discordgo.Session, *discordgo.MessageCreat
 		content := message.Content
 
 		// Check if the message was sent by a bot
-		if message.Author.Bot && !router.BotsAllowed {
+		if message.Author == nil || message.Author.Bot && !router.BotsAllowed {
 			return
 		}
 
